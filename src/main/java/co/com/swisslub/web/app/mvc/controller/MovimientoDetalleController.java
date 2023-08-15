@@ -16,12 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import co.com.swisslub.web.app.mvc.model.Movimiento;
 import co.com.swisslub.web.app.mvc.model.MovimientoDetalle;
-import co.com.swisslub.web.app.mvc.model.DTO.MovimientoDTO;
 import co.com.swisslub.web.app.mvc.model.DTO.MovimientoDetalleDTO;
 import co.com.swisslub.web.app.mvc.service.IMovimientoDetalleService;
-import co.com.swisslub.web.app.mvc.service.IMovimientoService;
 
 /**
  * @author INGENIERO JAVIER
@@ -48,7 +45,7 @@ public class MovimientoDetalleController {
 	
 	@GetMapping(path = "/movimientoDetalles/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> listarXMovimiento(@PathVariable("id") int idMov){
-        List<MovimientoDetalle> entities =service.buscarMovimiento(idMov);
+        List<MovimientoDetalle> entities =service.buscarXMovimiento(idMov);
         return new ResponseEntity<Object>(entities, HttpStatus.OK);
     }
 	
@@ -59,10 +56,17 @@ public class MovimientoDetalleController {
     }
 	
 	@PostMapping(path = "/guardar", produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> guardarMovimiento(@RequestBody MovimientoDetalle movimiento ){
-        MovimientoDetalle entities =service.crear(movimiento);
+    public ResponseEntity<Object> guardarMovimiento(@RequestBody MovimientoDetalle movimientoDetalle ){
+        MovimientoDetalle entities =service.crear(movimientoDetalle);
         return new ResponseEntity<Object>(entities, HttpStatus.OK);
     }
+	
+	@PostMapping(path = "/guardarLista", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> guardarMovimientoListaDetalle(@RequestBody List<MovimientoDetalle> lista){
+        String entities =service.crearListaDetalles(lista);
+        return new ResponseEntity<Object>(entities, HttpStatus.OK);
+    }
+	
 	@PostMapping(path = "/editar", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> editarMovimiento(@RequestBody MovimientoDetalle movimientoDetalle ){
         MovimientoDetalle entities =service.editar(movimientoDetalle);

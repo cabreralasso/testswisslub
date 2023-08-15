@@ -25,9 +25,8 @@ public class MovimientoDetalle implements Serializable {
 	@Column(name="id_mdet")
 	private int id;
 	
-//	@ManyToMany
-//	@JoinColumn(name="id_mov")
-//	private Movimiento movimiento;
+	@Column(name="id_mov")
+	private int idMov;
 	
 	@Column(name="item_mdet")
 	private String item;
@@ -70,6 +69,15 @@ public class MovimientoDetalle implements Serializable {
 
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
+	}
+	
+
+	public int getIdMov() {
+		return idMov;
+	}
+
+	public void setIdMov(int idMov) {
+		this.idMov = idMov;
 	}
 
 	@Override

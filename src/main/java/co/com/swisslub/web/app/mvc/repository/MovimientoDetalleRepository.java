@@ -19,5 +19,5 @@ import co.com.swisslub.web.app.mvc.model.MovimientoDetalle;
 @Repository
 @Transactional
 public interface MovimientoDetalleRepository extends JpaRepository<MovimientoDetalle, Integer>{
-
+	public List<MovimientoDetalle> findByidMov(int id); 
 }

@@ -26,9 +26,9 @@ public class MovimientoDetalleServiceImpl implements IMovimientoDetalleService {
 
 	private boolean validaInformacion(MovimientoDetalle movimientoDetalle) {
 
-//		if(movimientoDetalle.getMovimiento()==null) {
-//			return false;
-//		}
+		if(movimientoDetalle.getId()==0) {
+			return false;
+		}
 		if(movimientoDetalle.getCantidad()<1) {
 			return false;
 		}
@@ -54,7 +54,6 @@ public class MovimientoDetalleServiceImpl implements IMovimientoDetalleService {
 
 	@Override
 	public List<MovimientoDetalle> listar() {
-		
 		return repository.findAll();
 	}
 
@@ -73,17 +72,13 @@ public class MovimientoDetalleServiceImpl implements IMovimientoDetalleService {
 	}
 
 	@Override
-	public List<MovimientoDetalle> buscarMovimiento(Integer id) {
-		Optional<MovimientoDetalle> optional = Optional.of(repository.getById(id));
-		MovimientoDetalleDTO movimientoDetalle = null;
+	public List<MovimientoDetalle> buscarXMovimiento(Integer id) {
+		Optional<List<MovimientoDetalle>> optional = Optional.of(repository.findByidMov(id));
+		List<MovimientoDetalle> lista= null;
 		if (optional.isPresent()) {
-			movimientoDetalle= new MovimientoDetalleDTO();
-			movimientoDetalle.setId(optional.get().getId());
-//			movimientoDetalle.setMovimientoDescripcion(optional.get().getMovimiento().getDescripcion());
-			movimientoDetalle.setItem(optional.get().getItem());
-			movimientoDetalle.setCantidad(optional.get().getCantidad());
+			lista=optional.get();
 		}
-		return null;
+		return lista;
 	}
 
 	@Override
@@ -98,9 +93,10 @@ public class MovimientoDetalleServiceImpl implements IMovimientoDetalleService {
 	}
 
 	@Override
-	public void crearDetalles(List<MovimientoDetalle> lista) {
+	public String crearListaDetalles(List<MovimientoDetalle> lista) {
 		repository.saveAll(lista);
 
+		return "Se ha guardado la lista";
 	}
 
 

@@ -25,7 +25,7 @@ import co.com.swisslub.web.app.mvc.service.IMovimientoService;
  *
  */
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/movimiento")
 public class MovimientoController {
 	@Autowired
 	private IMovimientoService service;
@@ -55,6 +55,7 @@ public class MovimientoController {
         Movimiento entities =service.crear(movimiento);
         return new ResponseEntity<Object>(entities, HttpStatus.OK);
     }
+	
 	@PostMapping(path = "/editar", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> editarMovimiento(@RequestBody Movimiento movimiento ){
         Movimiento entities =service.editar(movimiento);
