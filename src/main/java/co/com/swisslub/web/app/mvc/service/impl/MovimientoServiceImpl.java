@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.com.swisslub.web.app.mvc.model.Movimiento;
-import co.com.swisslub.web.app.mvc.model.MovimientoEstado;
+import co.com.swisslub.web.app.mvc.model.DTO.MovimientoDTO;
 import co.com.swisslub.web.app.mvc.repository.MovimientoRepository;
 import co.com.swisslub.web.app.mvc.service.IMovimientoService;
 
@@ -28,7 +28,7 @@ public class MovimientoServiceImpl implements IMovimientoService {
 	@Override
 	public Movimiento crear(Movimiento movimiento) {
 		if (validaInformacion(movimiento)) {
-			movimiento.setEstado(new MovimientoEstado(1));
+			movimiento.setEstado("b");
 			movimiento.setCreacion(new Date());
 			repository.save(movimiento);
 		}
@@ -60,13 +60,13 @@ public class MovimientoServiceImpl implements IMovimientoService {
 	@Override
 	public Movimiento editar(Movimiento movimiento) {
 		if (validaInformacion(movimiento)) {
-			 Movimiento movimientoTem= buscarId(movimiento.getId());
-			 if(movimientoTem!=null) {
-				 repository.save(movimiento);	 
-			 }			
+			Optional<Movimiento> optional = Optional.of(repository.getById(movimiento.getId()));
+			if (optional.isPresent()) {
+				repository.save(movimiento);
+			}
 		}
 		return movimiento;
-	
+
 	}
 
 	@Override
@@ -75,24 +75,36 @@ public class MovimientoServiceImpl implements IMovimientoService {
 	}
 
 	@Override
-	public Movimiento buscarId(Integer id) {
+	public MovimientoDTO buscarId(Integer id) {
 		Optional<Movimiento> optional = Optional.of(repository.getById(id));
-		Movimiento movimiento = null;
+		MovimientoDTO movimiento = new MovimientoDTO();
 		if (optional.isPresent()) {
-			movimiento = optional.get();
+			movimiento.setDescripcion(optional.get().getDescripcion());
+			movimiento.setId(optional.get().getId());
+			movimiento.setEmpresa(optional.get().getEmpresa().getNombre());
+			movimiento.setBodegaOrigen(optional.get().getOrigen().getNombre());
+			movimiento.setBodegaDestino(optional.get().getDestino().getNombre());
+			movimiento.setFechaCreacion(optional.get().getCreacion());
+			movimiento.setFechaEntrega(optional.get().getEntrega());
+			movimiento.setEstado(optional.get().getEstado());
 		}
 		return movimiento;
 	}
 
 	@Override
-	public List<Movimiento> buscarEstado(Integer id) {
-		List<Movimiento> lista = repository.findById_estado(id);
+	public List<Movimiento> buscarEstado(String id) {
+		List<Movimiento> lista = repository.findByEstado(id);
 		return lista;
 	}
 
 	@Override
-	public void eliminar(Integer id) {
-		repository.deleteById(id);
+	public String eliminar(Integer id) {
+		Optional<Movimiento> optional = Optional.of(repository.getById(id));
+		if (optional.isPresent()) {
+			repository.deleteById(id);
+			return "Movimiento eliminado..";
+		}
+		return "el movimiento no existe";
 	}
 
 }

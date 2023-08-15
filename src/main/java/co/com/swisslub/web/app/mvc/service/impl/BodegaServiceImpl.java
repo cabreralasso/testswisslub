@@ -22,7 +22,9 @@ public class BodegaServiceImpl implements IBodegaService {
 		List<Bodega>lista= null;
 		if(optional.isPresent()) {
 			lista=optional.get();
-			
+			for(Bodega bodega:lista) {
+			System.out.println(bodega);
+			}
 		}
 		return lista;
 	}

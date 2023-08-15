@@ -5,13 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import co.com.swisslub.web.app.mvc.model.Empresa;
-import co.com.swisslub.web.app.mvc.model.Movimiento;
 import co.com.swisslub.web.app.mvc.model.MovimientoDetalle;
-import co.com.swisslub.web.app.mvc.repository.EmpresaRepository;
+import co.com.swisslub.web.app.mvc.model.DTO.MovimientoDetalleDTO;
 import co.com.swisslub.web.app.mvc.repository.MovimientoDetalleRepository;
-import co.com.swisslub.web.app.mvc.service.IEmpresaService;
 import co.com.swisslub.web.app.mvc.service.IMovimientoDetalleService;
 
 @Service
@@ -30,9 +26,9 @@ public class MovimientoDetalleServiceImpl implements IMovimientoDetalleService {
 
 	private boolean validaInformacion(MovimientoDetalle movimientoDetalle) {
 
-		if(movimientoDetalle.getMovimiento()==null) {
-			return false;
-		}
+//		if(movimientoDetalle.getMovimiento()==null) {
+//			return false;
+//		}
 		if(movimientoDetalle.getCantidad()<1) {
 			return false;
 		}
@@ -43,12 +39,12 @@ public class MovimientoDetalleServiceImpl implements IMovimientoDetalleService {
 		
 		return true;
 	}
-
+	
 	@Override
 	public MovimientoDetalle editar(MovimientoDetalle movimientoDetalle) {
 		if (validaInformacion(movimientoDetalle)) {
-			 MovimientoDetalle movimientoTem= buscarId(movimientoDetalle.getId());
-			 if(movimientoTem!=null) {
+			 Optional<MovimientoDetalle> optional = Optional.of(repository.getById(movimientoDetalle.getId()));;
+			 if(optional.isPresent()) {
 				 repository.save(movimientoDetalle);	 
 			 }			
 		}
@@ -63,24 +59,41 @@ public class MovimientoDetalleServiceImpl implements IMovimientoDetalleService {
 	}
 
 	@Override
-	public MovimientoDetalle buscarId(Integer id) {
+	public MovimientoDetalleDTO buscarId(Integer id) {
 		Optional<MovimientoDetalle> optional = Optional.of(repository.getById(id));
-		MovimientoDetalle movimientoDetalle = null;
+		MovimientoDetalleDTO movimientoDetalle = null;
 		if (optional.isPresent()) {
-			movimientoDetalle = optional.get();
+			movimientoDetalle= new MovimientoDetalleDTO();
+			movimientoDetalle.setId(optional.get().getId());
+//			movimientoDetalle.setMovimientoDescripcion(optional.get().getMovimiento().getDescripcion());
+			movimientoDetalle.setItem(optional.get().getItem());
+			movimientoDetalle.setCantidad(optional.get().getCantidad());
 		}
 		return movimientoDetalle;
 	}
 
 	@Override
-	public MovimientoDetalle buscarMovimiento(Integer id) {
-		// TODO Auto-generated method stub
+	public List<MovimientoDetalle> buscarMovimiento(Integer id) {
+		Optional<MovimientoDetalle> optional = Optional.of(repository.getById(id));
+		MovimientoDetalleDTO movimientoDetalle = null;
+		if (optional.isPresent()) {
+			movimientoDetalle= new MovimientoDetalleDTO();
+			movimientoDetalle.setId(optional.get().getId());
+//			movimientoDetalle.setMovimientoDescripcion(optional.get().getMovimiento().getDescripcion());
+			movimientoDetalle.setItem(optional.get().getItem());
+			movimientoDetalle.setCantidad(optional.get().getCantidad());
+		}
 		return null;
 	}
 
 	@Override
-	public void eliminar(Integer id) {
-		// TODO Auto-generated method stub
+	public String eliminar(Integer id) {
+		Optional<MovimientoDetalle> optional = Optional.of(repository.getById(id));
+		if (optional.isPresent()) {
+			repository.deleteById(id);
+			return "Se eleimino el movimiento detalle";
+		}
+		return "no exixte el registro";
 		
 	}
 
@@ -88,6 +101,14 @@ public class MovimientoDetalleServiceImpl implements IMovimientoDetalleService {
 	public void crearDetalles(List<MovimientoDetalle> lista) {
 		repository.saveAll(lista);
 
+	}
+
+
+
+	@Override
+	public List<MovimientoDetalle> buscarXestado(String estado) {
+		
+		return repository.findAll();
 	}
 	
 	

@@ -3,13 +3,13 @@
  */
 package co.com.swisslub.web.app.mvc.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -18,15 +18,16 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "movimiento_detalle")
-public class MovimientoDetalle {
+public class MovimientoDetalle implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id_mdet")
 	private int id;
-	@OneToOne
-	@JoinColumn(name="id_mov")
-	private Movimiento movimiento;
+	
+//	@ManyToMany
+//	@JoinColumn(name="id_mov")
+//	private Movimiento movimiento;
 	
 	@Column(name="item_mdet")
 	private String item;
@@ -41,7 +42,7 @@ public class MovimientoDetalle {
 	public MovimientoDetalle(int id, Movimiento movimiento, String item, int cantidad) {
 		super();
 		this.id = id;
-		this.movimiento = movimiento;
+//		this.movimiento = movimiento;
 		this.item = item;
 		this.cantidad = cantidad;
 	}
@@ -54,13 +55,6 @@ public class MovimientoDetalle {
 		this.id = id;
 	}
 
-	public Movimiento getMovimiento() {
-		return movimiento;
-	}
-
-	public void setMovimiento(Movimiento movimiento) {
-		this.movimiento = movimiento;
-	}
 
 	public String getItem() {
 		return item;
@@ -80,7 +74,7 @@ public class MovimientoDetalle {
 
 	@Override
 	public String toString() {
-		return "MovimientoDetalle [id=" + id + ", movimiento=" + movimiento + ", item=" + item + ", cantidad="
+		return "MovimientoDetalle [id=" + id +  ", item=" + item + ", cantidad="
 				+ cantidad + "]";
 	}
 

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import co.com.swisslub.web.app.mvc.model.Movimiento;
+import co.com.swisslub.web.app.mvc.model.MovimientoDetalle;
 
 /**
  * @author INGENIERO JAVIER
@@ -16,5 +17,6 @@ import co.com.swisslub.web.app.mvc.model.Movimiento;
  */
 @Repository
 public interface MovimientoRepository extends JpaRepository<Movimiento, Integer>{
-	public List<Movimiento> findById_estado(Integer id);
+	public List<Movimiento> findByEstado(String id);
+	
 }
